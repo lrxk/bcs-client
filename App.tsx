@@ -1,20 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StripeProvider } from '@stripe/stripe-react-native';
+import CheckoutScreen from './CheckoutScreen';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <StripeProvider
+      publishableKey="pk_test_51LxoKKHqMywXhbC79U1iNbpdJObZir61ouukdBjw1g5OVwnIdcLQmJju8uq5UDxDB8edvSCIT2sxVAVmzDkJ626I00m7XU3GGc"
+      merchantIdentifier="merchant.com.example"
+    >
+      <CheckoutScreen />
+    </StripeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
