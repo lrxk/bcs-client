@@ -1,8 +1,8 @@
 import { useStripe } from "@stripe/stripe-react-native";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Text, Button, SafeAreaView, View } from "react-native";
 
-export default function CheckoutScreen() {
+export default function CheckoutScreen({navigation}: any) {
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
     const [loading, setLoading] = useState(false);
     const [paymentIntentId, setPaymentIntentId] = useState<string>("");
@@ -12,7 +12,7 @@ export default function CheckoutScreen() {
     const itemsId = [1];
 
     const fetchPaymentSheetParams = async () => {
-        const response = await fetch(`http://172.17.27.10:8000/payments/`, {
+        const response = await fetch(`http://172.26.3.95:8000/payments/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export default function CheckoutScreen() {
             Alert.alert(`Error code: ${error.code}`, error.message);
         } else {
             const paymentIntent = `pi_${paymentIntentId.split("_")[1]}`;
-            const response = await fetch(`http://172.17.27.10:8000/payments/check/${paymentIntent}`, {
+            const response = await fetch(`http://172.26.3.95:8000/payments/check/${paymentIntent}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
