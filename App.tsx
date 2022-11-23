@@ -7,10 +7,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Button, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
 
 export type cart = {
   items: Array<{ id: string; quantity: number }>;
 };    
+// initialize empty cart
+export const cart: cart = {
+  items: [],
+};
 
 
 
@@ -30,7 +35,7 @@ function HomeScreen({ navigation }: any) {
       />
       <Button
         title="Go to cart"
-        onPress={() => navigation.navigate('Cart')}
+        onPress={() => navigation.navigate('Cart', { cart: cart })}
       />
     </View>
   );
