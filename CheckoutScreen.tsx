@@ -1,16 +1,23 @@
 import { useStripe } from "@stripe/stripe-react-native";
+import React from "react";
 import { useEffect, useState } from "react";
-import { Alert, Text, Button, SafeAreaView, View } from "react-native";
+import { Alert, Text, Button, SafeAreaView, View, FlatList } from "react-native";
 
-export default function CheckoutScreen({navigation}: any) {
+export default function CheckoutScreen({navigation,route}: any) {
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
     const [loading, setLoading] = useState(false);
     const [paymentIntentId, setPaymentIntentId] = useState<string>("");
-
-    const amount = 1099;
+    const amount = route.params.cart.items.reduce((acc: number, item: { quantity: number; }) => acc + item.quantity, 0) * 100;
     const userId = 1;
-    const itemsId = [1];
-
+    const itemsId = route.params.cart.items.map((item: { id: string; }) => item.id);
+    const itemList = route.params.cart.items.map((item: { id: string; name: string; quantity: number; }) => {
+        return {
+            id: item.id,
+            name: item.name,
+            quantity: item.quantity,
+            amount: amount
+        }
+    });
     const fetchPaymentSheetParams = async () => {
         const response = await fetch(`http://172.26.3.95:8000/payments/`, {
             method: 'POST',
@@ -87,6 +94,13 @@ export default function CheckoutScreen({navigation}: any) {
                 title="Checkout"
                 onPress={openPaymentSheet}
             />
+            <FlatList data={itemList} renderItem={({ item }) => (
+                <View>
+                    <Text>{item.name}</Text>
+                    <Text>{item.quantity}</Text>
+                    <Text>{item.amount}</Text>
+                </View>
+            )} />
         </SafeAreaView>
     );
 }
