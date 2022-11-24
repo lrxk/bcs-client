@@ -10,11 +10,11 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 
 export type cart = {
-  items: Array<{ id: string; quantity: number }>;
+  items: Array<{ id: string; quantity: number ; name:string}>;
 };    
 // initialize empty cart
 export const cart: cart = {
-  items: [],
+  items: [  ],
 };
 
 
@@ -27,7 +27,7 @@ function HomeScreen({ navigation }: any) {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Button
         title="Go to Checkout"
-        onPress={() => navigation.navigate('Checkout')}
+        onPress={() => navigation.navigate('Checkout',{cart:cart})}
       />
       <Button
         title="Add item to cart"
