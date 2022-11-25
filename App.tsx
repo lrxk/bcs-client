@@ -1,19 +1,18 @@
 import { StripeProvider } from '@stripe/stripe-react-native';
 
-import CheckoutScreen from './CheckoutScreen';
-import BarCodeScannerScreen from './BarCodeScannerScreen';
-import CartScreen from './CartScreen';
+import CheckoutScreen from './Screens/CheckoutScreen';
+import BarCodeScannerScreen from './Screens/BarCodeScannerScreen';
+import CartScreen from './Screens/CartScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Button, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { Cart } from './Types/Types';
 
-export type cart = {
-  items: Array<{ id: string; quantity: number ; name:string}>;
-};    
+
 // initialize empty cart
-export const cart: cart = {
+export const cart: Cart = {
   items: [  ],
 };
 
