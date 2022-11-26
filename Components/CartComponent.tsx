@@ -13,7 +13,7 @@ export default function CartComponent(props: { cart: Cart }) {
     useEffect(() => {
         let total = 0;
         cart.items.forEach((item) => {
-            total += item.price;
+            total += item.price * item.quantity;
         });
         setTotal(total);
     }, [cart]);
@@ -25,10 +25,28 @@ export default function CartComponent(props: { cart: Cart }) {
             <ScrollView style={Styles.cartContainer}>
                 {cart.items.map((item) => {
                     return (
-                        <View style={Styles.itemContainer}>
-                            <Text style={Styles.itemText}>{item.name}</Text>
-                            <Text style={Styles.itemText}>{item.price}</Text>
-                            <Text style={Styles.itemText}>{item.quantity}</Text>
+                        <View style={Styles.itemContainer} key={item.id}>
+                            <Text style={Styles.itemText}>Item name:{item.name}</Text>
+                            <Text style={Styles.itemText}>Price: {item.price}</Text>
+                            <Text style={Styles.itemText}>Quantity:{item.quantity}</Text>
+                            <TouchableOpacity style={Styles.button} onPress={() => {
+                                let index = cart.items.findIndex((items) => items.id === item.id);
+                                if (index !== -1) {
+                                    cart.items[index].quantity++;
+                                }
+                                setCart({ ...cart });
+                            }}>
+                                <Text style={Styles.buttonText}>+</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={Styles.button} onPress={() => {
+                                let index = cart.items.findIndex((items) => items.id === item.id);
+                                if (index !== -1) {
+                                    cart.items[index].quantity--;
+                                }
+                                setCart({ ...cart });
+                            }}>
+                                <Text style={Styles.buttonText}>-</Text>
+                            </TouchableOpacity>
                         </View>
                     );
                 })}
@@ -37,7 +55,7 @@ export default function CartComponent(props: { cart: Cart }) {
                 <Text style={Styles.totalText}>Total: {total}</Text>
             </View>
             <View style={Styles.buttonContainer}>
-                <TouchableOpacity style={Styles.button} onPress={() => navigation.navigate('Checkout')}>
+                <TouchableOpacity style={Styles.button} onPress={() => navigation.navigate('Checkout',{cart:cart})}>
                     <Text style={Styles.buttonText}>Checkout</Text>
                 </TouchableOpacity>
             </View>
