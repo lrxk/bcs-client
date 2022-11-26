@@ -1,5 +1,3 @@
-import { StripeProvider } from '@stripe/stripe-react-native';
-
 import CheckoutScreen from './Screens/CheckoutScreen';
 import BarCodeScannerScreen from './Screens/BarCodeScannerScreen';
 import CartScreen from './Screens/CartScreen';
@@ -41,14 +39,13 @@ function HomeScreen({ navigation }: any) {
 }
 export default function App({ navigation }: any) {
   return (
-
+    
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Checkout" component={CheckoutScreen} />
         <Stack.Screen name="BarCodeScanner" component={BarCodeScannerScreen} />
         <Stack.Screen name="Cart" component={CartScreen} />
-
       </Stack.Navigator>
     </NavigationContainer>
 
