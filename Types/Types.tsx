@@ -1,5 +1,3 @@
-import React from 'react';
-
 // a single item
 export type Item={
     id: string,
