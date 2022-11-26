@@ -13,7 +13,7 @@ export default function BarCodeScannerScreen() {
     const [scanned, setScanned] = useState(false);
     const [item, setItem] = useState<Item>();
     const navigation = useNavigation();
-    const ipAddress=Constants.expoConfig.extra.address;
+    const ipAddress = Constants.expoConfig.extra.address;
     useEffect(() => {
         (async () => {
             const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -25,7 +25,7 @@ export default function BarCodeScannerScreen() {
         setScanned(true);
         Alert.alert('Bar code with type ' + type + ' and data ' + data + ' has been scanned!');
         let item: Item = {
-            name: data, 
+            name: data,
             price: 1,
             id: '',
             quantity: 0
@@ -39,38 +39,49 @@ export default function BarCodeScannerScreen() {
                 let item: Item;
                 console.log("Before fetch");
                 console.log(ipAddress);
-                await fetch('http://'+ipAddress+'/items/' + id, {
+                await fetch('http://' + ipAddress + '/items/' + id, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 })
-                    .then((response) => response.json()).then((json) => {
-                        item = {
-                            id: json.id,
-                            name: json.name,
-                            price: json.price / 100,
-                            quantity: 1
-                        };
-                        console.log("item", item);
-                        // if the item is already in the cart, we increment the quantity
-                        let index = cart.items.findIndex((items) => items.id === json.id);
-                        console.log("index", index);
-                        if (index !== -1) {
-                            cart.items[index].quantity++;
+                    .then((response) => {
+                        if (response.status == 404) {
+                            Alert.alert("Error");
+                            return;
+                        } else {
+                            return response.json();
                         }
-                        else {
-                            console.log("New Item");
-                            cart.items.push(item);
+                    }).then((json) => {
+                        if (json != undefined && json != null) {
+                            item = {
+                                id: json.id,
+                                name: json.name,
+                                price: json.price / 100,
+                                quantity: 1
+                            };
+                            console.log("item", item);
+                            // if the item is already in the cart, we increment the quantity
+                            let index = cart.items.findIndex((items) => items.id === json.id);
+                            console.log("index", index);
+                            if (index !== -1) {
+                                cart.items[index].quantity++;
+                            }
+                            else {
+                                console.log("New Item");
+                                cart.items.push(item);
+                            }
+                            Alert.alert("Item added to cart");
+                        } else {
+                            Alert.alert("Item not found");
                         }
                     })
                     .catch((error) => {
-                        console.log("Not found");
                         console.error(error);
                     });
                 console.log("cart", cart);
                 console.log("After fetch");
-                Alert.alert("Item added to cart");
+
                 // console.log(id);
                 // console.log(cart);
             }} />
