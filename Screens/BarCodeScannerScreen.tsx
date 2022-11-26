@@ -6,9 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { cart } from '../App';
 import { Item } from '../Types/Types';
 import { Styles } from '../Styles';
-
 import ItemComponent from '../Components/ItemComponent';
-import { createPaymentMethod } from '@stripe/stripe-react-native';
 export default function BarCodeScannerScreen() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
@@ -47,24 +45,28 @@ export default function BarCodeScannerScreen() {
                         item = {
                             id: json.id,
                             name: json.name,
-                            price: json.price,
+                            price: json.price / 100,
                             quantity: 1
                         };
                         console.log("item", item);
                         // if the item is already in the cart, we increment the quantity
-                        let index = cart.items.findIndex((item) => item.id === id);
+                        let index = cart.items.findIndex((items) => items.id === json.id);
+                        console.log("index", index);
                         if (index !== -1) {
                             cart.items[index].quantity++;
-                        } else {
+                        }
+                        else {
+                            console.log("New Item");
                             cart.items.push(item);
                         }
-                        console.log("cart", cart);
                     })
                     .catch((error) => {
                         console.log("Not found");
                         console.error(error);
                     });
+                console.log("cart", cart);
                 console.log("After fetch");
+                Alert.alert("Item added to cart");
                 // console.log(id);
                 // console.log(cart);
             }} />
