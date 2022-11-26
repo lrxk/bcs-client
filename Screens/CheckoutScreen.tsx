@@ -3,12 +3,14 @@ import { useStripe } from "@stripe/stripe-react-native";
 import React from "react";
 import { useEffect, useState } from "react";
 import { Alert, Text, Button, SafeAreaView, View, FlatList } from "react-native";
-
+import { Address } from "../Constant/Constant";
+import Constants from "expo-constants"; 
 export default function CheckoutScreen(props: { route: any }) {
     const navigation = useNavigation();
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
     const [loading, setLoading] = useState(false);
     const [paymentIntentId, setPaymentIntentId] = useState<string>("");
+    const ipAddress=Constants.expoConfig.extra.address;
     // calculate total price
     const cart = props.route.params.cart;
     let amount = 0;
@@ -20,7 +22,7 @@ export default function CheckoutScreen(props: { route: any }) {
     const itemsId = props.route.params.cart.items.map((item: { id: string; }) => item.id);
     const itemList = props.route.params.cart.items;
     const fetchPaymentSheetParams = async () => {
-        const response = await fetch(`http://192.168.1.75:8000/payments/`, {
+        const response = await fetch(`http://${ipAddress}/payments/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -68,7 +70,7 @@ export default function CheckoutScreen(props: { route: any }) {
             Alert.alert(`Error code: ${error.code}`, error.message);
         } else {
             const paymentIntent = `pi_${paymentIntentId.split("_")[1]}`;
-            const response = await fetch(`http://192.168.1.75:8000/payments/check/${paymentIntent}`, {
+            const response = await fetch(`http://${ipAddress}/payments/check/${paymentIntent}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

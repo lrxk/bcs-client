@@ -6,12 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 import { cart } from '../App';
 import { Item } from '../Types/Types';
 import { Styles } from '../Styles';
+import Constants from 'expo-constants';
 import ItemComponent from '../Components/ItemComponent';
 export default function BarCodeScannerScreen() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [item, setItem] = useState<Item>();
     const navigation = useNavigation();
+    const ipAddress=Constants.expoConfig.extra.address;
     useEffect(() => {
         (async () => {
             const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -35,7 +37,8 @@ export default function BarCodeScannerScreen() {
                 // console.log("toto");
                 let item: Item;
                 console.log("Before fetch");
-                await fetch('http://192.168.1.75:8000/items/' + id, {
+                console.log(ipAddress);
+                await fetch('http://'+ipAddress+'/items/' + id, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
