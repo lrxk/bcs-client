@@ -25,7 +25,8 @@ export default function BarCodeScannerScreen() {
         setScanned(true);
         Alert.alert('Bar code with type ' + type + ' and data ' + data + ' has been scanned!');
         let item: Item = {
-            name: data, price: 1,
+            name: data, 
+            price: 1,
             id: '',
             quantity: 0
         };
