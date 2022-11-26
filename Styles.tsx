@@ -113,5 +113,49 @@ export const Styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    itemNameContainer: {
+        flex: 1,    
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    itemNameText: {
+        fontSize: 30,
+        color: 'black',
+        textAlign: 'center',
+        marginTop: 20,
+    },
+    itemQuantityContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    itemName:{
+        fontSize: 30,
+        color: 'black',
+        textAlign: 'center',
+        marginTop: 20,
+        
+    },
+    itemPrice:{
+        fontSize: 30,
+        color: 'black',
+        textAlign: 'center',
+        marginTop: 20,    
+    },
+    itemPriceContainer : {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    itemQuantity : {
+        fontSize: 20,
+        color: 'black',
+        textAlign: 'center',
+
+    },
 
 });
