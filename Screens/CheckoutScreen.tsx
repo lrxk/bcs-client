@@ -82,7 +82,11 @@ export default function CheckoutScreen(props: { route: any }) {
                 })
             });
 
-            if (response.status == 200) Alert.alert('Success', 'Your order is confirmed!');
+            if (response.status === 200){
+                Alert.alert('Success', 'Your order is confirmed!');
+                // empty cart
+                props.route.params.setCart({items: []});
+            } 
         }
     };
 
@@ -109,7 +113,7 @@ export default function CheckoutScreen(props: { route: any }) {
                         <Text>Cost : {item.price}</Text>
                         <Text>Total For this item : {item.price * item.quantity}</Text>
                     </View><View>
-                            <Text> Total: {amount/100}</Text>
+                            <Text> Total: {amount / 100}</Text>
                         </View></>
                 )} />
             </StripeProvider>
