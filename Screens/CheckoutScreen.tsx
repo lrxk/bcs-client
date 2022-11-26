@@ -3,7 +3,6 @@ import { useStripe } from "@stripe/stripe-react-native";
 import React from "react";
 import { useEffect, useState } from "react";
 import { Alert, Text, Button, SafeAreaView, View, FlatList } from "react-native";
-import { Address } from "../Constant/Constant";
 import Constants from "expo-constants"; 
 export default function CheckoutScreen(props: { route: any }) {
     const navigation = useNavigation();
