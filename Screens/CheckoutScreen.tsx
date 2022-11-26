@@ -1,25 +1,26 @@
+import { useNavigation } from "@react-navigation/native";
 import { useStripe } from "@stripe/stripe-react-native";
 import React from "react";
 import { useEffect, useState } from "react";
 import { Alert, Text, Button, SafeAreaView, View, FlatList } from "react-native";
 
-export default function CheckoutScreen({navigation,route}: any) {
+export default function CheckoutScreen(props: { route: any }) {
+    const navigation = useNavigation();
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
     const [loading, setLoading] = useState(false);
     const [paymentIntentId, setPaymentIntentId] = useState<string>("");
-    const amount = route.params.cart.items.reduce((acc: number, item: { quantity: number; }) => acc + item.quantity, 0) * 100;
-    const userId = 1;
-    const itemsId = route.params.cart.items.map((item: { id: string; }) => item.id);
-    const itemList = route.params.cart.items.map((item: { id: string; name: string; quantity: number; }) => {
-        return {
-            id: item.id,
-            name: item.name,
-            quantity: item.quantity,
-            amount: amount
-        }
+    // calculate total price
+    const cart = props.route.params.cart;
+    let amount = 0;
+    cart.items.forEach((item: { price: number;quantity:number }) => {
+        amount += item.price*item.quantity;
     });
+    amount = amount * 100;
+    const userId = 1;
+    const itemsId = props.route.params.cart.items.map((item: { id: string; }) => item.id);
+    const itemList = props.route.params.cart.items;
     const fetchPaymentSheetParams = async () => {
-        const response = await fetch(`http://172.26.3.95:8000/payments/`, {
+        const response = await fetch(`http://192.168.1.75:8000/payments/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ export default function CheckoutScreen({navigation,route}: any) {
             Alert.alert(`Error code: ${error.code}`, error.message);
         } else {
             const paymentIntent = `pi_${paymentIntentId.split("_")[1]}`;
-            const response = await fetch(`http://172.26.3.95:8000/payments/check/${paymentIntent}`, {
+            const response = await fetch(`http://192.168.1.75:8000/payments/check/${paymentIntent}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -95,10 +96,11 @@ export default function CheckoutScreen({navigation,route}: any) {
                 onPress={openPaymentSheet}
             />
             <FlatList data={itemList} renderItem={({ item }) => (
-                <View>
+                <View key={item.id}>
                     <Text>{item.name}</Text>
                     <Text>{item.quantity}</Text>
-                    <Text>{item.amount}</Text>
+                    <Text>{item.price}</Text>
+                    <Text>Total :{item.price*item.quantity}</Text>
                 </View>
             )} />
         </SafeAreaView>
