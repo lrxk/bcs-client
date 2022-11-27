@@ -49,10 +49,18 @@ export default function BarCodeScannerScreen() {
 
     const handleBarCodeScanned = async ({ type, data }: any) => {
         setScanned(true);
+        // if the data is not an integer, then it is not a valid id
+        if (isNaN(data)) {
+            await AsyncAlert('Invalid id', 'The id you scanned is not valid. Please try again.', () => { });
+            setScanned(false);
+            return;
+        }
         await fetch(`http://${ipAddress}/items/${data}`)
-            .then(response => response.json())
+            .then(response => {
+                return response.json();
+            })
             .then(async json => {
-                if (json != null || json != undefined) {
+                if (json !== null || json !== undefined) {
                     let index = cart.items.findIndex((item) => item.id === json.id);
                     // check if item is already in cart if so increment quantity, if not add item to cart
                     if (index === -1) {
@@ -122,8 +130,6 @@ export default function BarCodeScannerScreen() {
                     .catch((error) => {
                         console.error(error);
                     });
-                console.log("cart", cart);
-                console.log("After fetch");
             }} /><Button title="Go to Checkout" onPress={() => navigation.navigate('Checkout', { cart: cart })} /><Button title='Go to Cart' onPress={() => navigation.navigate('Cart', { cart: cart })} /></>
         )
     } else {
