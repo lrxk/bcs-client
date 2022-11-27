@@ -25,14 +25,12 @@ export default function CartComponent(props: { cart: Cart }) {
                         <Text style={Styles.itemName}>{item.name}</Text>
                     </View>
                     <View style={Styles.itemPriceContainer}>
-                        <Text style={Styles.itemPrice}>${item.price}</Text>
+                        <Text style={Styles.itemPrice}>{item.price / 100}€</Text>
                     </View>
                     <View style={Styles.itemQuantityContainer}>
                         <Text style={Styles.itemQuantity}>Quantity: {item.quantity}</Text>
                     </View>
-                    <TouchableOpacity style={Styles.button} onPress={() => navigation.navigate('Checkout', { cart: cart })}>
-                        <Text style={Styles.buttonText}>Checkout</Text>
-                    </TouchableOpacity>
+
                     {/* increment quantity button */}
                     <TouchableOpacity style={Styles.button} onPress={() => {
                         let newCart = { ...cart };
