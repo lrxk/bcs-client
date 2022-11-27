@@ -10,7 +10,8 @@ export default function CheckoutScreen(props: { route: any }) {
     const [paymentIntentId, setPaymentIntentId] = useState<string>("");
     const navigation = useNavigation();
     const ipAddress = Constants.expoConfig.extra.address;
-
+    const stripe_publishable_key = Constants.expoConfig.extra.stripe_publishable_key;
+    
     // calculate total price
     const cart = props.route.params.cart;
     let amount = 0;
@@ -75,9 +76,7 @@ export default function CheckoutScreen(props: { route: any }) {
             Alert.alert(`Error code: ${error.code}`, error.message);
             console.log(error);
         } else {
-            console.log(paymentIntentId);
             const paymentIntent = `pi_${paymentIntentId.split("_")[1]}`;
-            console.log(paymentIntent);
             const response = await fetch(`http://${ipAddress}/payments/check/${paymentIntent}`, {
                 method: 'POST',
                 headers: {
@@ -102,25 +101,24 @@ export default function CheckoutScreen(props: { route: any }) {
 
     return (
         <SafeAreaView>
-           
-                <Text>Payment</Text>
-                <Button
-                    disabled={!loading}
-                    title="Checkout"
-                    onPress={openPaymentSheet}
-                />
-                <FlatList data={itemList} renderItem={({ item }) => (
-                    <View key={item.id}>
-                        <Text>Item Name: {item.name}</Text>
-                        <Text>Quantity : {item.quantity}</Text>
-                        <Text>Item Cost : {item.price / 100}</Text>
-                        <Text>Total For this item : {(item.price * item.quantity) / 100}</Text>
-                    </View>
-                )} />
-                <View>
-                    <Text> Total: {amount / 100}</Text>
+            <Text>Payment</Text>
+            <Button
+                disabled={!loading}
+                title="Checkout"
+                onPress={openPaymentSheet}
+            />
+            <FlatList data={itemList} renderItem={({ item }) => (
+                <View key={item.id}>
+                    <Text>Item Name: {item.name}</Text>
+                    <Text>Quantity : {item.quantity}</Text>
+                    <Text>Item Cost : {item.price / 100}</Text>
+                    <Text>Total For this item : {(item.price * item.quantity) / 100}</Text>
                 </View>
-            
+            )} />
+            <View>
+                <Text> Total: {amount / 100}</Text>
+            </View>
+
         </SafeAreaView>
     );
 }

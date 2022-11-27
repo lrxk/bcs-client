@@ -10,7 +10,6 @@ import React from 'react';
 import { Cart } from './Types/Types';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import Constants from "expo-constants";
-const stripe_publishable_key = Constants.expoConfig.extra.stripe_publishable_key;
 
 // initialize empty cart
 export const cart: Cart = {
@@ -44,11 +43,7 @@ export default function App({ navigation }: any) {
   return (
 
     <NavigationContainer>
-      <StripeProvider
-        publishableKey={stripe_publishable_key}
-        merchantIdentifier="merchant.com.example">
 
-      </StripeProvider>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Checkout" component={CheckoutScreen} />
