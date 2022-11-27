@@ -15,9 +15,11 @@ export default function ItemComponent(props: {
     return (
         <><View style={Styles.container}>
             <View style={Styles.textContainer}>
-                <TextInput style={Styles.textInput} placeholder="Enter Item id" onChangeText={(text) => setId(text)} />
+                {/* numeric values only */}
+                <TextInput style={Styles.textInput} placeholder="Enter Item id" keyboardType='numeric' onChangeText={(text) => setId(text)} />
             </View>
             <View style={Styles.buttonContainer}>
+
                 <TouchableOpacity style={Styles.button} onPress={() => props.onAddToCart(id)}>
                     <Text style={Styles.buttonText}>Add to cart</Text>
                 </TouchableOpacity>
