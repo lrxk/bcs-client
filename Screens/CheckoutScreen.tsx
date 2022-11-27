@@ -10,8 +10,6 @@ export default function CheckoutScreen(props: { route: any }) {
     const [paymentIntentId, setPaymentIntentId] = useState<string>("");
     const navigation = useNavigation();
     const ipAddress = Constants.expoConfig.extra.address;
-    const stripe_publishable_key = Constants.expoConfig.extra.stripe_publishable_key;
-    
     // calculate total price
     const cart = props.route.params.cart;
     let amount = 0;
