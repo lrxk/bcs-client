@@ -15,9 +15,8 @@ export default function CheckoutScreen(props: { route: any }) {
     const cart = props.route.params.cart;
     let amount = 0;
     cart.items.forEach((item: { price: number; quantity: number }) => {
-        amount += item.price * item.quantity;
+        amount += (item.price * item.quantity);
     });
-    amount = amount * 100;
     const userId = 1;
     const itemsId = props.route.params.cart.items.map((item: { id: string; }) => item.id);
     const itemList = props.route.params.cart.items;
@@ -82,11 +81,9 @@ export default function CheckoutScreen(props: { route: any }) {
                 })
             });
 
-            if (response.status === 200){
+            if (response.status === 200) {
                 Alert.alert('Success', 'Your order is confirmed!');
-                // empty cart
-                props.route.params.setCart({items: []});
-            } 
+            }
         }
     };
 
@@ -110,12 +107,13 @@ export default function CheckoutScreen(props: { route: any }) {
                     <><View key={item.id}>
                         <Text>Item Name: {item.name}</Text>
                         <Text>Quantity : {item.quantity}</Text>
-                        <Text>Cost : {item.price}</Text>
-                        <Text>Total For this item : {item.price * item.quantity}</Text>
-                    </View><View>
-                            <Text> Total: {amount / 100}</Text>
-                        </View></>
+                        <Text>Cost : {item.price / 100}</Text>
+                        <Text>Total For this item : {(item.price * item.quantity) / 100}</Text>
+                    </View></>
                 )} />
+                <View>
+                    <Text> Total: {amount / 100}</Text>
+                </View>
             </StripeProvider>
         </SafeAreaView>
     );
