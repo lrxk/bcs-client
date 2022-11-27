@@ -20,21 +20,71 @@ export default function BarCodeScannerScreen() {
             setHasPermission(status === 'granted');
         })();
     }, []);
+    const AsyncAlert = async (title: string, message: string, it: Item, func: Function) => {
+        return new Promise((resolve) => {
+            Alert.alert(title, message, [
+                {
+                    text: 'Yes',
+                    onPress: () => {
+                        resolve(true);
+                        func();
+                    },
+                },
+                {
+                    text: 'No',
+                    onPress: () => resolve(false),
 
-    const handleBarCodeScanned = ({ type, data }: any) => {
+                }
+            ]);
+        });
+    };
+    const incrementQuantity = (item: Item) => {
+        let index = cart.items.findIndex((i: Item) => i.id === item.id);
+        cart.items[index].quantity++;
+    }
+    const addNewItem = (item: Item) => {
+        cart.items.push(item);
+    }
+
+    const handleBarCodeScanned = async ({ type, data }: any) => {
         setScanned(true);
-        Alert.alert('Bar code with type ' + type + ' and data ' + data + ' has been scanned!');
-        let item: Item = {
-            name: data,
-            price: 1,
-            id: '',
-            quantity: 0
-        };
-        navigation.navigate('Checkout', { cart: cart });
+        // Alert.alert('Bar code with type ' + type + ' and data ' + data + ' has been scanned!');
+        await fetch(`http://${ipAddress}/items/${data}`)
+            .then(response => response.json())
+            .then(async json => {
+                if (json != null || json != undefined) {
+                    let index = cart.items.findIndex((item) => item.id === json.id);
+                    // check if item is already in cart if so increment quantity, if not add item to cart
+                    if (index === -1) {
+                        let item: Item = {
+                            id: json.id,
+                            name: json.name,
+                            price: json.price,
+                            quantity: 1
+                        }
+                        // make the alert await for the user to press ok
+                        await AsyncAlert('Add Item', `Would you like to add ${item.name} to your cart?`, item, () => {
+                            addNewItem(item);
+                        });
+                    } else {
+                        // make the alert await for the user to press ok
+                        await AsyncAlert('Increment Quantity', `Would you like to increment the quantity of ${json.name} in your cart?`, json, () => {
+                            incrementQuantity(json);
+                        });
+                        // cart.items[index].quantity++;
+                    }
+                } else {
+                    Alert.alert('Item not found');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        setScanned(false);
     };
     if (hasPermission === false || hasPermission === null) {
         return (
-            <ItemComponent onAddToCart={async (id) => {
+            <><ItemComponent onAddToCart={async (id) => {
                 // console.log("toto");
                 let item: Item;
                 console.log("Before fetch");
@@ -57,7 +107,7 @@ export default function BarCodeScannerScreen() {
                             item = {
                                 id: json.id,
                                 name: json.name,
-                                price: json.price / 100,
+                                price: json.price,
                                 quantity: 1
                             };
                             console.log("item", item);
@@ -84,17 +134,15 @@ export default function BarCodeScannerScreen() {
 
                 // console.log(id);
                 // console.log(cart);
-            }} />
+            }} /><Button title="Go to Checkout" onPress={() => navigation.navigate('Checkout', { cart: cart })} /><Button title='Go to Cart' onPress={() => navigation.navigate('Cart', { cart: cart })} /></>
         )
     } else {
         return (
-            <View style={Styles.container}>
-                <BarCodeScanner
+            <><View style={Styles.container}>
+                {<BarCodeScanner
                     onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                    style={Styles.barcodeScanner}
-                />
-                {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
-            </View>
+                    style={{ height: 200, width: 200 }} />}
+            </View><Button title="Go to Checkout" onPress={() => navigation.navigate('Checkout', { cart: cart })} /><Button title='Go to Cart' onPress={() => navigation.navigate('Cart', { cart: cart })} /></>
         );
     }
 }
