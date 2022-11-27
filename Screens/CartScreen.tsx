@@ -18,8 +18,17 @@ export default function CartScreen(props: { route: any }) {
         setTotal(total);
     }, [cart]);
     return (
-        <View style={Styles.container}>
-           <CartComponent cart={cart}/>
+        <><View style={Styles.container}>
+            <CartComponent cart={cart} />
+            {/* place a checkout button at the bottom of the screen */}
+
         </View>
+            <TouchableOpacity style={Styles.button} onPress={() => {
+                navigation.navigate('Checkout', { cart: cart });
+            }}>
+                <Text style={Styles.buttonText}>Checkout</Text>
+            </TouchableOpacity>
+        </>
+
     );
 }
