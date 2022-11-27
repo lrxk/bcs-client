@@ -10,15 +10,22 @@ export default function CheckoutScreen(props: { route: any }) {
     const [paymentIntentId, setPaymentIntentId] = useState<string>("");
     const navigation = useNavigation();
     const ipAddress = Constants.expoConfig.extra.address;
-    const stripe_publishable_key = Constants.expoConfig.extra.stripe_publishable_key;
+
     // calculate total price
     const cart = props.route.params.cart;
     let amount = 0;
     cart.items.forEach((item: { price: number; quantity: number }) => {
         amount += (item.price * item.quantity);
     });
+    console.log(amount);
     const userId = 1;
-    const itemsId = props.route.params.cart.items.map((item: { id: string; }) => item.id);
+    // browse the id in the cart item array and if the quantity is greater than 1, then add the item to the array multiple times
+    let itemsId: number[] = [];
+    cart.items.forEach((item: { id: number; quantity: number }) => {
+        for (let i = 0; i < item.quantity; i++) {
+            itemsId.push(item.id);
+        }
+    });
     const itemList = props.route.params.cart.items;
     const fetchPaymentSheetParams = async () => {
         const response = await fetch(`http://${ipAddress}/payments/`, {
@@ -47,7 +54,6 @@ export default function CheckoutScreen(props: { route: any }) {
             ephemeralKey,
             customer,
         } = await fetchPaymentSheetParams();
-
         const { error } = await initPaymentSheet({
             merchantDisplayName: "Example, Inc.",
             customerId: customer,
@@ -69,7 +75,9 @@ export default function CheckoutScreen(props: { route: any }) {
             Alert.alert(`Error code: ${error.code}`, error.message);
             console.log(error);
         } else {
+            console.log(paymentIntentId);
             const paymentIntent = `pi_${paymentIntentId.split("_")[1]}`;
+            console.log(paymentIntent);
             const response = await fetch(`http://${ipAddress}/payments/check/${paymentIntent}`, {
                 method: 'POST',
                 headers: {
@@ -83,6 +91,7 @@ export default function CheckoutScreen(props: { route: any }) {
 
             if (response.status === 200) {
                 Alert.alert('Success', 'Your order is confirmed!');
+                navigation.navigate('Paid', { itemList: itemList });
             }
         }
     };
@@ -93,10 +102,7 @@ export default function CheckoutScreen(props: { route: any }) {
 
     return (
         <SafeAreaView>
-            <StripeProvider
-                publishableKey={stripe_publishable_key}
-                merchantIdentifier="merchant.com.example"
-            >
+           
                 <Text>Payment</Text>
                 <Button
                     disabled={!loading}
@@ -104,17 +110,17 @@ export default function CheckoutScreen(props: { route: any }) {
                     onPress={openPaymentSheet}
                 />
                 <FlatList data={itemList} renderItem={({ item }) => (
-                    <><View key={item.id}>
+                    <View key={item.id}>
                         <Text>Item Name: {item.name}</Text>
                         <Text>Quantity : {item.quantity}</Text>
                         <Text>Item Cost : {item.price / 100}</Text>
                         <Text>Total For this item : {(item.price * item.quantity) / 100}</Text>
-                    </View></>
+                    </View>
                 )} />
                 <View>
                     <Text> Total: {amount / 100}</Text>
                 </View>
-            </StripeProvider>
+            
         </SafeAreaView>
     );
 }
