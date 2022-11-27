@@ -13,7 +13,7 @@ export default function ItemComponent(props: {
     const [item, setItem] = useState(emptyItem);
     const [id, setId] = useState('');
     return (
-        <View style={Styles.container}>
+        <><View style={Styles.container}>
             <View style={Styles.textContainer}>
                 <TextInput style={Styles.textInput} placeholder="Enter Item id" onChangeText={(text) => setId(text)} />
             </View>
@@ -22,9 +22,8 @@ export default function ItemComponent(props: {
                     <Text style={Styles.buttonText}>Add to cart</Text>
                 </TouchableOpacity>
             </View>
-            <Button title="Go to Checkout" onPress={() => navigation.navigate('Checkout', { cart: cart })} />
-            <Button title='Go to Cart' onPress={() => navigation.navigate('Cart', { cart: cart })} />
-        </View>
+
+        </View></>
     )
 }
 
