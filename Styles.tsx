@@ -33,7 +33,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     text: {
-        fontSize: 20,
+        fontSize: 12,
         color: 'black',
         textAlign: 'center',
         marginTop: 20,
@@ -47,6 +47,7 @@ export const Styles = StyleSheet.create({
     buttonText: {
         fontSize: 20,
         color: 'white',
+        textAlign: 'center',
 
     },
     header: {
@@ -56,7 +57,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     headerText: {
-        fontSize: 30,
+        fontSize: 20,
         color: 'black',
         textAlign: 'center',
         marginTop: 20,
@@ -78,7 +79,7 @@ export const Styles = StyleSheet.create({
         borderColor: '#000',
     },
     itemText: {
-        fontSize: 20,
+        fontSize: 12,
         color: 'black',
         textAlign: 'center',
         marginTop: 20,
@@ -90,7 +91,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     totalText: {
-        fontSize: 30,
+        fontSize: 20,
         color: 'black',
         textAlign: 'center',
         marginTop: 20,
@@ -102,16 +103,15 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     barcodeText: {
-        fontSize: 30,
+        fontSize: 20,
         color: 'black',
         textAlign: 'center',
         marginTop: 20,
     },
     barcodeScanner: {
         flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+        width: '100%',
+        height: '80%',
     },
     itemNameContainer: {
         flex: 1,    
@@ -120,7 +120,7 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     itemNameText: {
-        fontSize: 30,
+        fontSize: 12,
         color: 'black',
         textAlign: 'center',
         marginTop: 20,
@@ -132,14 +132,14 @@ export const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     itemName:{
-        fontSize: 30,
+        fontSize: 12,
         color: 'black',
         textAlign: 'center',
         marginTop: 20,
         
     },
     itemPrice:{
-        fontSize: 30,
+        fontSize: 12,
         color: 'black',
         textAlign: 'center',
         marginTop: 20,    
@@ -152,7 +152,7 @@ export const Styles = StyleSheet.create({
     },
 
     itemQuantity : {
-        fontSize: 20,
+        fontSize: 12,
         color: 'black',
         textAlign: 'center',
 
