@@ -107,7 +107,7 @@ export default function CheckoutScreen(props: { route: any }) {
                     <><View key={item.id}>
                         <Text>Item Name: {item.name}</Text>
                         <Text>Quantity : {item.quantity}</Text>
-                        <Text>Cost : {item.price / 100}</Text>
+                        <Text>Item Cost : {item.price / 100}</Text>
                         <Text>Total For this item : {(item.price * item.quantity) / 100}</Text>
                     </View></>
                 )} />
